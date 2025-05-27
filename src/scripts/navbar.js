@@ -1,45 +1,36 @@
+import { loadGame } from "./game.js";
+
 const HTML_ELEMENTS = {
-    nav_list: document.getElementById("nav-list"),
-    nav_template: document.getElementById("nav-template"),
-    autocomplete_label: document.getElementById("autocomplete-label"),
+    nav: document.getElementById("nav"),
+    nav_tab_template: document.getElementById("nav-tab-template"),
 };
 
-function setInputAutocompleteLabel() {
-    HTML_ELEMENTS.autocomplete_label.textContent = "";
-    const label = "The " + window.STATES.actualPage.page + " is";
-    [...label].forEach((item, index) => {
-        const span = document.createElement("span");
-        span.style.transitionDelay = `${(index / (label.length - 1)) * 500}ms`;
-        span.textContent = item;
-        HTML_ELEMENTS.autocomplete_label.appendChild(span);
-    });    const span = document.createElement("span");
-    span.classList.add("dots");
-    HTML_ELEMENTS.autocomplete_label.appendChild(span);
+async function handleTabInput(event) {
+    const page = event.target.value;
+    localStorage.setItem("last-game-page", page);
+    await loadGame(page);
 }
 
-function changePage(input) {
-    console.log(input.value);
-    input.checked = true;
-    document
-        .querySelectorAll(".my-game")
-        .forEach((e) => e?.classList.add("hidden"));
-    document
-        .querySelector(`.my-game[game='${input.value}']`)
-        ?.classList.remove("hidden");
-    window.STATES.actualPage = window.DATA.find(
-        (item) => item.page === input.value
-    );
-    setInputAutocompleteLabel();
-}
-
-export function loadNavBar(item, index) {
-    const navElement = HTML_ELEMENTS.nav_template.content.cloneNode(true);
-    const input = navElement.querySelector("input");
-    input.value = item.page;
-    navElement.querySelector("[nav-name]").textContent = item.page;
-    if (index === 0) {
-        changePage(input);
+async function createTab(last_game, page_name, index) {
+    const tab = HTML_ELEMENTS.nav_tab_template.content.cloneNode(true);
+    const radio = tab.querySelector("[nav-radio]");
+    radio.value = page_name;
+    radio.addEventListener("input", handleTabInput);
+    tab.querySelector("[nav-label]").textContent = page_name;
+    if (last_game === page_name) {
+        radio.checked = true;
+        await loadGame(page_name);
+    } else if (index === 0) {
+        radio.checked = true;
+        localStorage.setItem("last-game-page", page_name);
+        await loadGame(page_name);
     }
-    input.addEventListener("input", (e) => changePage(e.target));
-    HTML_ELEMENTS.nav_list.appendChild(navElement);
+    HTML_ELEMENTS.nav.appendChild(tab);
+}
+
+export function loadNav(pages) {
+    const last_game = localStorage.getItem("last-game-page");
+    pages.forEach(async (item, index) => {
+        await createTab(last_game, item.page, index);
+    });
 }

@@ -1,83 +1,103 @@
-import { setElementGameList } from "./game-list.js";
+import { setItemInfo } from "./item-info.js";
 
-function onclickAutocompleteOption(input, item, dropdown, random) {
-    dropdown.dataset.tries = JSON.stringify(
-        dropdown.dataset.tries
-            ? [...JSON.parse(dropdown.dataset.tries), item.id]
-            : [item.id]
+const HTML_ELEMENTS = {
+    autocomplete_input: document.getElementById("autocomplete-input"),
+    autocomplete_options: document.getElementById("autocomplete-options"),
+    autocomplete_option_template: document.getElementById(
+        "autocomplete-option-template"
+    ),
+};
+
+function handleClick(event) {
+    const option = event.target.closest("[data-id]");
+    const value = option.dataset.id;
+    const id = value.split("-")[1];
+    setItemInfo(id);
+
+    HTML_ELEMENTS.autocomplete_input.dataset.attempts = JSON.stringify(
+        HTML_ELEMENTS.autocomplete_input.dataset.attempts
+            ? [
+                  ...JSON.parse(
+                      HTML_ELEMENTS.autocomplete_input.dataset.attempts
+                  ),
+                  value,
+              ]
+            : [value]
     );
-    dropdown.classList.add("hidden");
-    input.value = "";
-    setElementGameList(item);
 
-    if (item.id === random.id) {
-        console.log("Random item selected:", item);
-        input.disabled = true;
+    const random = window.LOCAL.randoms[window.LOCAL.actual_page];
+    if (value === `${window.LOCAL.actual_page}-${random}`) {
+        console.log("Random item selected:", value);
+        HTML_ELEMENTS.autocomplete_input.dataset.won = JSON.stringify(
+            HTML_ELEMENTS.autocomplete_input.dataset.won
+                ? [
+                      ...JSON.parse(
+                          HTML_ELEMENTS.autocomplete_input.dataset.won
+                      ),
+                      window.LOCAL.actual_page,
+                  ]
+                : [window.LOCAL.actual_page]
+        );
     }
+
+    HTML_ELEMENTS.autocomplete_options.classList.add("hidden");
+    HTML_ELEMENTS.autocomplete_options.innerHTML = "";
+    HTML_ELEMENTS.autocomplete_input.value = "";
 }
 
-function handleInput(input, dropdown, items, random) {
-    const columns_info = window.STATES.actualPage.autocomplete;
-    const query = input.value.trim().toLowerCase();
-    dropdown.innerHTML = "";
-    const tries = dropdown.dataset.tries
-        ? JSON.parse(dropdown.dataset.tries)
-        : [];
+function handleInput(event) {
+    const input = event.target;
+    const inputValue = input.value.toLowerCase().trim();
+    const attempts = JSON.parse(input.dataset.attempts || "[]");
+    const won = JSON.parse(input.dataset.won || "[]");
 
-    if (!query) {
-        dropdown.classList.add("hidden");
+    if (inputValue === "") {
+        HTML_ELEMENTS.autocomplete_options.classList.add("hidden");
+        return;
+    }
+    HTML_ELEMENTS.autocomplete_options.classList.remove("hidden");
+    HTML_ELEMENTS.autocomplete_options.innerHTML = "";
+
+    if (won.includes(window.LOCAL.actual_page)) {
+        const option =
+            HTML_ELEMENTS.autocomplete_option_template.content.cloneNode(true);
+        option.querySelector("[option-name]").textContent = "Congratulations!";
+        option.querySelector("[option-description]").textContent =
+            "You have already won this level";
+        HTML_ELEMENTS.autocomplete_options.appendChild(option);
         return;
     }
 
-    const filtered = items
-        .filter((item) => !tries.includes(item.id))
-        .filter((item) => {
-            return columns_info.some((col) =>
-                String(item[col]).toLowerCase().includes(query)
-            );
+    const actual_page = window.LOCAL.actual_page;
+    const filteredOptions = window.LOCAL.actual_data
+        .filter((item) => !attempts.includes(`${actual_page}-${item.id}`))
+        .filter((item) => item.name.toLowerCase().includes(inputValue))
+        .sort((a, b) => {
+            const aIndex = a.name.toLowerCase().indexOf(inputValue);
+            const bIndex = b.name.toLowerCase().indexOf(inputValue);
+            if (aIndex !== bIndex) return aIndex - bIndex;
+            return a.name.length - b.name.length;
         })
         .slice(0, 4);
 
-    if (!filtered.length) {
-        dropdown.classList.add("hidden");
-        return;
-    }
-
-    const template = document.querySelector("#autocomplete-option");
-    filtered.forEach((item) => {
-        const option = template.content.cloneNode(true);
-        option.querySelector("[option-name]").textContent =
-            item[columns_info[0]];
-        option.querySelector("[option-description]").textContent = columns_info
-            .slice(1)
-            .map((col) => item[col])
-            .join(" - ");
-
-        const optionElement = option.firstElementChild;
-        optionElement.addEventListener("click", () =>
-            onclickAutocompleteOption(input, item, dropdown, random)
-        );
-        dropdown.appendChild(option);
+    const autocomplete_description = window.LOCAL.pages_info
+        .find((page) => page.page === actual_page)
+        .autocomplete.split(", ");
+    filteredOptions.forEach((option) => {
+        const optionElement =
+            HTML_ELEMENTS.autocomplete_option_template.content.cloneNode(true);
+        optionElement.querySelector("[option-name]").textContent = option.name;
+        optionElement.querySelector("[option-description]").textContent =
+            autocomplete_description
+                .slice(1)
+                .map((col) => option[col])
+                .join(" - ");
+        optionElement.firstElementChild.dataset.id = `${actual_page}-${option.id}`;
+        optionElement.firstElementChild.addEventListener("click", handleClick);
+        HTML_ELEMENTS.autocomplete_options.appendChild(optionElement);
     });
-
-    dropdown.classList.remove("hidden");
 }
 
-export function setAutocomplete(wrapper, items, random) {
-    const input = wrapper.querySelector(".autocomplete-input");
-    const dropdown = wrapper.querySelector(".autocomplete-list");
-
-    let timeout;
-    input.addEventListener("input", () => {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-            handleInput(input, dropdown, items, random);
-        }, 300);
-    });
-
-    document.addEventListener("click", (e) => {
-        if (!wrapper.contains(e.target)) {
-            dropdown.classList.add("hidden");
-        }
-    });
+export function setAutocomplete() {
+    HTML_ELEMENTS.autocomplete_input.addEventListener("input", handleInput);
 }
