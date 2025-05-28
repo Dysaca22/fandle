@@ -83,7 +83,7 @@
         <main
             class="flex flex-col items-center justify-between w-[90vw] md:w-[80vw] h-full p-5 md:p-10 hidden"
         >
-            <article class="w-full">
+            <article class="w-full order-2">
                 <section
                     id="game-successes"
                     class="w-full h-[20vh] rounded-lg p-2 md:p-4"
@@ -95,7 +95,7 @@
                     <!-- Dynamic Content -->
                 </section>
             </article>
-            <article class="w-full h-[60vh]">
+            <article class="w-full h-[60vh] order-2">
                 <section
                     id="attempts"
                     class="w-full h-full flex flex-col items-center justify-start gap-4"
@@ -113,7 +113,7 @@
                 </section>
             </article>
             <article
-                class="w-full flex flex-row items-center justify-center gap-5"
+                class="w-full flex flex-row items-center justify-center gap-5 order-1 sm:order-2"
             >
                 <section class="relative">
                     <button
@@ -148,11 +148,11 @@
                     </button>
                     <nav
                         id="nav"
-                        class="absolute bottom-full left-1/2 -translate-x-1/2 mb-5 bg-white rounded-2xl py-4 px-2 flex flex-col items-center justify-center gap-2 shadow-lg opacity-0 scale-0 origin-bottom pointer-events-none transition-all duration-300 [&.show]:opacity-100 [&.show]:scale-100 [&.show]:pointer-events-auto z-50"
+                        class="absolute top-full sm:bottom-full left-1/2 -translate-x-1/2 mt-5 sm:mb-5 bg-white rounded-2xl py-4 px-2 flex flex-col items-center justify-center gap-2 shadow-lg opacity-0 scale-0 origin-top sm:origin-bottom pointer-events-none transition-all duration-300 [&.show]:opacity-100 [&.show]:scale-100 [&.show]:pointer-events-auto z-50"
                     >
                         <!-- Dynamic content -->
                         <div
-                            class="absolute bottom-[-6px] left-1/2 -translate-x-1/2 w-3 h-3 bg-white rotate-45 rounded-sm"
+                            class="absolute top-[-6px] sm:bottom-[-6px] left-1/2 -translate-x-1/2 w-3 h-3 bg-white rotate-45 rounded-sm"
                         ></div>
                     </nav>
                 </section>
@@ -166,7 +166,7 @@
                     />
                     <div
                         id="autocomplete-options"
-                        class="absolute bottom-full left-1/2 -translate-x-1/2 mb-5 w-[300px] bg-white rounded-2xl overflow-hidden hidden"
+                        class="absolute top-full sm:bottom-full left-1/2 -translate-x-1/2 mt-5 sm:mb-5 w-[300px] bg-white rounded-2xl overflow-hidden hidden"
                     ></div>
                 </section>
             </article>
