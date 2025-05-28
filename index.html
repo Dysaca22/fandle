@@ -4,6 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Fandle | The Ultimatedle</title>
+        <meta name="theme-color" content="#ffffff">
         <!-- Favicon -->
         <link
             rel="apple-touch-icon"
@@ -55,29 +56,29 @@
             }
         </style>
     </head>
-    <body
-        class="h-screen w-screen flex overflow-hidden flex items-center justify-center"
-    >
-        <div
-            class="fixed w-1/2 h-full top-0 left-0 bg-[linear-gradient(to_bottom_right,#f2a220,#e18f24)] -z-10"
-        ></div>
-        <div
-            class="fixed w-1/2 h-full top-0 right-0 bg-[linear-gradient(to_bottom_left,#3c3b36,#1e1e1e)] -z-10"
-        ></div>
-        <p
-            class="absolute top-3/4 left-1/2 -translate-y-full -translate-x-full pr-5 text-[clamp(6rem,12vw,12rem)] font-bold text-[#df961c] z-[1000] font-['Kolker_Brush'] loading"
-        >
-            FAN
-        </p>
-        <p
-            class="absolute top-3/4 left-1/2 -translate-y-full text-[clamp(6rem,12vw,12rem)] pl-1 font-bold text-[#272725] z-[1000] font-['Kolker_Brush'] loading"
-        >
-            DLE
-        </p>
-        <div
-            class="absolute inset-0 flex items-center justify-center pointer-events-none z-[2] loading"
-        >
-            <div class="lamp"></div>
+    <body class="h-screen w-screen flex flex items-center justify-center theme-light">
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden">
+            <div
+                class="fixed w-1/2 h-full top-0 left-0 bg-[linear-gradient(to_bottom_right,#f2a220,#e18f24)] -z-10"
+            ></div>
+            <div
+                class="fixed w-1/2 h-full top-0 right-0 bg-[linear-gradient(to_bottom_left,#3c3b36,#1e1e1e)] -z-10"
+            ></div>
+            <p
+                class="absolute top-3/4 left-1/2 -translate-y-full -translate-x-full pr-5 text-[clamp(6rem,12vw,12rem)] font-bold text-[#df961c] z-[1000] font-['Kolker_Brush'] loading"
+            >
+                FAN
+            </p>
+            <p
+                class="absolute top-3/4 left-1/2 -translate-y-full text-[clamp(6rem,12vw,12rem)] pl-1 font-bold text-[#272725] z-[1000] font-['Kolker_Brush'] loading"
+            >
+                DLE
+            </p>
+            <div
+                class="absolute inset-0 flex items-center justify-center pointer-events-none z-[2] loading"
+            >
+                <div class="lamp"></div>
+            </div>
         </div>
         <main
             class="flex flex-col items-center justify-between w-[90vw] md:w-[80vw] h-full p-5 md:p-10 hidden"
@@ -99,7 +100,7 @@
                     id="attempts"
                     class="w-full h-full flex flex-col items-center justify-start gap-4"
                 >
-                    <p class="text-3xl text-white tracking-widest">
+                    <p class="text-3xl text-white tracking-widest text-center">
                         Your Attempts
                         <span id="page-name" class="capitalize">***</span>
                     </p>
