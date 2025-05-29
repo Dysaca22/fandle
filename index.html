@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Fandle | The Ultimatedle</title>
-        <meta name="theme-color" content="#ffffff">
+        <meta name="theme-color" content="#ffffff" />
         <!-- Favicon -->
         <link
             rel="apple-touch-icon"
@@ -33,20 +33,6 @@
         />
         <!-- Tailwind CSS -->
         <script src="https://cdn.tailwindcss.com"></script>
-        <!-- Tailwind Themes -->
-        <script>
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        colors: {
-                            primary: "#f39e2f",
-                            secondary: "#4d312d",
-                            tertiary: "#363636",
-                        },
-                    },
-                },
-            };
-        </script>
         <!-- Custom Style -->
         <link rel="stylesheet" href="src/styles/scroll-bar.css" />
         <link rel="stylesheet" href="src/styles/lamp.css" />
@@ -56,16 +42,18 @@
             }
         </style>
     </head>
-    <body class="h-screen w-screen flex flex items-center justify-center theme-light">
+    <body
+        class="h-screen w-screen flex flex items-center justify-center theme-light"
+    >
         <div class="absolute top-0 left-0 w-full h-full overflow-hidden">
             <div
-                class="fixed w-1/2 h-full top-0 left-0 bg-[linear-gradient(to_bottom_right,#f2a220,#e18f24)] -z-10"
+                class="fixed w-1/2 h-full top-0 left-0 bg-[linear-gradient(to_bottom_right,#946411,#634614)] -z-10"
             ></div>
             <div
                 class="fixed w-1/2 h-full top-0 right-0 bg-[linear-gradient(to_bottom_left,#3c3b36,#1e1e1e)] -z-10"
             ></div>
             <p
-                class="absolute top-3/4 left-1/2 -translate-y-full -translate-x-full pr-5 text-[clamp(6rem,12vw,12rem)] font-bold text-[#df961c] z-[1000] font-['Kolker_Brush'] loading"
+                class="absolute top-3/4 left-1/2 -translate-y-full -translate-x-full pr-5 text-[clamp(6rem,12vw,12rem)] font-bold text-[#6f5011] z-[1000] font-['Kolker_Brush'] loading"
             >
                 FAN
             </p>
@@ -113,7 +101,7 @@
                 </section>
             </article>
             <article
-                class="w-full flex flex-row items-center justify-center gap-5 order-1 sm:order-2"
+                class="w-full flex flex-row items-center justify-center gap-5 max-sm:order-1 sm:order-2"
             >
                 <section class="relative">
                     <button
@@ -148,11 +136,11 @@
                     </button>
                     <nav
                         id="nav"
-                        class="absolute top-full sm:bottom-full left-1/2 -translate-x-1/2 mt-5 sm:mb-5 bg-white rounded-2xl py-4 px-2 flex flex-col items-center justify-center gap-2 shadow-lg opacity-0 scale-0 origin-top sm:origin-bottom pointer-events-none transition-all duration-300 [&.show]:opacity-100 [&.show]:scale-100 [&.show]:pointer-events-auto z-50"
+                        class="absolute max-sm:top-full sm:bottom-full left-1/2 -translate-x-1/2 max-sm:mt-5 sm:mb-5 bg-white rounded-2xl py-4 px-2 flex flex-col items-center justify-center gap-2 shadow-lg opacity-0 scale-0 max-sm:origin-top sm:origin-bottom pointer-events-none transition-all duration-300 [&.show]:opacity-100 [&.show]:scale-100 [&.show]:pointer-events-auto z-50"
                     >
                         <!-- Dynamic content -->
                         <div
-                            class="absolute top-[-6px] sm:bottom-[-6px] left-1/2 -translate-x-1/2 w-3 h-3 bg-white rotate-45 rounded-sm"
+                            class="absolute max-sm:top-[-6px] sm:bottom-[-6px] left-1/2 -translate-x-1/2 w-3 h-3 bg-white rotate-45 rounded-sm"
                         ></div>
                     </nav>
                 </section>
@@ -166,7 +154,7 @@
                     />
                     <div
                         id="autocomplete-options"
-                        class="absolute top-full sm:bottom-full left-1/2 -translate-x-1/2 mt-5 sm:mb-5 w-[300px] bg-white rounded-2xl overflow-hidden hidden"
+                        class="absolute max-sm:top-full sm:bottom-full left-1/2 -translate-x-1/2 max-sm:mt-5 sm:mb-5 w-[300px] bg-white rounded-2xl overflow-hidden hidden"
                     ></div>
                 </section>
             </article>
@@ -217,7 +205,7 @@
                         ></div>
                     </div>
                     <div
-                        class="text-center transition z-10 relative opacity-[0.3] group-hover:opacity-100 [.active_&]:opacity-100 [.success_&]:opacity-100"
+                        class="text-center transition z-10 relative opacity-[0.5] group-hover:opacity-100 [.active_&]:opacity-100 [.success_&]:opacity-100"
                     >
                         <div
                             class="cursor-default text-white flex items-center gap-1"
