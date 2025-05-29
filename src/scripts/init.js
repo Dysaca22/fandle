@@ -11,6 +11,10 @@ window.LOCAL = {
     actual_page: "",
 };
 
+const HTML_ELEMENTS = {
+    hint: document.getElementById("hint"),
+};
+
 function generateRandom() {
     const timestamp = Date.now();
     const cryptoValues = new Uint32Array(window.LOCAL.pages_info.length);
@@ -33,6 +37,21 @@ function generateRandom() {
     );
 }
 
+function giveHint() {
+    HTML_ELEMENTS.hint.addEventListener("click", () => {
+        HTML_ELEMENTS.hint.disabled = true;
+        HTML_ELEMENTS.hint.dataset.games = JSON.stringify(
+            HTML_ELEMENTS.hint.dataset.games
+                ? [
+                      ...JSON.parse(HTML_ELEMENTS.hint.dataset.games),
+                      window.LOCAL.actual_page,
+                  ]
+                : [window.LOCAL.actual_page]
+        );
+        alert("F*** you. No hint for you!");
+    });
+}
+
 async function __init() {
     window.LOCAL.pages_info = await _readGoogleSheet(
         window.LOCAL.sheet_id,
@@ -51,6 +70,8 @@ async function __init() {
     initialGameElements(window.LOCAL.pages_info);
     loadNav(window.LOCAL.pages_info);
     setAutocomplete();
+    giveHint();
+    console.log(window.LOCAL.randoms);
 }
 
 function hideLoadingShowMain() {

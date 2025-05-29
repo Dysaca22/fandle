@@ -83,7 +83,7 @@
                     <!-- Dynamic Content -->
                 </section>
             </article>
-            <article class="w-full h-[60vh] order-2">
+            <article class="w-full h-[60vh] order-2 relative">
                 <section
                     id="attempts"
                     class="w-full h-full flex flex-col items-center justify-start gap-4"
@@ -99,6 +99,12 @@
                         ></div> -->
                     </div>
                 </section>
+                <p
+                    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[clamp(10rem,15vw,16rem)] font-bold font-['Garamond'] opacity-50 text-gray-500 pointer-events-none"
+                    id="game-status"
+                >
+                    1
+                </p>
             </article>
             <article
                 class="w-full flex flex-row items-center justify-center gap-5 max-sm:order-1 sm:order-2"
@@ -157,7 +163,70 @@
                         class="absolute max-sm:top-full sm:bottom-full left-1/2 -translate-x-1/2 max-sm:mt-5 sm:mb-5 w-[300px] bg-white rounded-2xl overflow-hidden hidden"
                     ></div>
                 </section>
+                <section class="relative">
+                    <button
+                        class="p-2 bg-white rounded-full text-lg hover:scale-105 transition flex items-center gap-1 text-sm hidden"
+                        style="
+                            box-shadow: -11px -11px 21px rgba(0, 0, 0, 0.2),
+                                11px 11px 21px rgba(0, 0, 0, 0.2);
+                        "
+                        id="play-again"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1em"
+                            height="1em"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                fill="currentColor"
+                                d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12S6.477 2 12 2v2a8 8 0 1 0 4.5 1.385V8h-2V2h6v2H18a9.99 9.99 0 0 1 4 8"
+                            />
+                        </svg>
+                        <p class="max-lg:hidden">Reset all games</p>
+                        <p class="max-sm:hidden lg:hidden">Reset</p>
+                    </button>
+                </section>
             </article>
+            <div class="absolute max-sm:bottom-5 sm:top-5 right-5 text-white">
+                <div class="relative">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        class="cursor-pointer"
+                        onclick="this.nextElementSibling.classList.toggle('show');"
+                    >
+                        <path
+                            fill="currentColor"
+                            d="M11.95 18q.525 0 .888-.363t.362-.887t-.362-.888t-.888-.362t-.887.363t-.363.887t.363.888t.887.362m.05 4q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20m.1-12.3q.625 0 1.088.4t.462 1q0 .55-.337.975t-.763.8q-.575.5-1.012 1.1t-.438 1.35q0 .35.263.588t.612.237q.375 0 .638-.25t.337-.625q.1-.525.45-.937t.75-.788q.575-.55.988-1.2t.412-1.45q0-1.275-1.037-2.087T12.1 6q-.95 0-1.812.4T8.975 7.625q-.175.3-.112.638t.337.512q.35.2.725.125t.625-.425q.275-.375.688-.575t.862-.2"
+                        />
+                    </svg>
+                    <div
+                        class="absolute max-sm:bottom-full sm:top-full right-0 max-sm:mb-2 sm:mt-2 bg-white p-2 rounded opacity-0 scale-0 [&.show]:opacity-100 [&.show]:scale-100 transition-all duration-300 z-50 max-sm:origin-bottom-right sm:origin-top-right flex flex-col gap-2"
+                    >
+                        <p class="flex items-center gap-2 text-black">
+                            <span
+                                class="w-2 h-2 rounded-full bg-green-500"
+                            ></span>
+                            Success
+                        </p>
+                        <p class="flex items-center gap-2 text-black">
+                            <span
+                                class="w-2 h-2 rounded-full bg-yellow-500"
+                            ></span>
+                            Close
+                        </p>
+                        <button
+                            class="px-3 py-2 bg-[#32322e] text-white w-full rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
+                            id="hint"
+                        >
+                            Hint
+                        </button>
+                    </div>
+                </div>
+            </div>
         </main>
         <!-- Templates -->
         <template id="nav-tab-template">

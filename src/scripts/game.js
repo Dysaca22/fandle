@@ -6,6 +6,9 @@ const HTML_ELEMENTS = {
     success_light_template: document.getElementById("success-light-template"),
     page_name: document.getElementById("page-name"),
     autocomplete_input: document.getElementById("autocomplete-input"),
+    play_again: document.getElementById("play-again"),
+    hint: document.getElementById("hint"),
+    game_status: document.getElementById("game-status"),
 };
 
 export async function loadGame(page) {
@@ -24,6 +27,27 @@ export async function loadGame(page) {
     ).config;
     const data = await _readGoogleSheet(window.LOCAL.sheet_id, page);
     window.LOCAL.actual_data = prepareData(config, data);
+
+    if (HTML_ELEMENTS.autocomplete_input.dataset.won?.includes(page)) {
+        HTML_ELEMENTS.play_again.classList.remove("hidden");
+    } else {
+        HTML_ELEMENTS.play_again.classList.add("hidden");
+    }
+    HTML_ELEMENTS.hint.disabled =
+        HTML_ELEMENTS.hint.dataset.games?.includes(page);
+
+    const game_status = JSON.parse(
+        HTML_ELEMENTS.game_status.dataset.games || "{}"
+    );
+    if (Object.keys(game_status).includes(page)) {
+        HTML_ELEMENTS.game_status.textContent = game_status[page];
+    } else {
+        HTML_ELEMENTS.game_status.textContent = 0;
+        HTML_ELEMENTS.game_status.dataset.games = JSON.stringify({
+            ...game_status,
+            [page]: 0,
+        });
+    }
 }
 
 export function initialGameElements(pages) {

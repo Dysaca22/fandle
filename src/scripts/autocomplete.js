@@ -6,6 +6,8 @@ const HTML_ELEMENTS = {
     autocomplete_option_template: document.getElementById(
         "autocomplete-option-template"
     ),
+    play_again: document.getElementById("play-again"),
+    game_status: document.getElementById("game-status"),
 };
 
 function handleClick(event) {
@@ -38,11 +40,23 @@ function handleClick(event) {
                   ]
                 : [window.LOCAL.actual_page]
         );
+        HTML_ELEMENTS.play_again.classList.remove("hidden");
     }
 
     HTML_ELEMENTS.autocomplete_options.classList.add("hidden");
     HTML_ELEMENTS.autocomplete_options.innerHTML = "";
     HTML_ELEMENTS.autocomplete_input.value = "";
+    HTML_ELEMENTS.autocomplete_input.focus();
+
+    const game_status = JSON.parse(
+        HTML_ELEMENTS.game_status.dataset.games || "{}"
+    );
+    game_status[window.LOCAL.actual_page] = (
+        parseInt(game_status[window.LOCAL.actual_page]) + 1
+    ).toString();
+    HTML_ELEMENTS.game_status.dataset.games = JSON.stringify(game_status);
+    HTML_ELEMENTS.game_status.textContent =
+        game_status[window.LOCAL.actual_page];
 }
 
 function handleInput(event) {

@@ -4,32 +4,32 @@ const HTML_ELEMENTS = {
     game_successes: document.getElementById("game-successes"),
 };
 
-/**
- * Compara dos valores según el tipo y retorna:
- * 0 = diferente, 1 = cerca, 2 = igual
- * @param {*} value1
- * @param {*} value2
- * @param {'int'|'float'|'options'|'string'} type
- * @param {number} [threshold]
- * @returns {0|1|2}
- */
 function compareValues(value1, value2, type, threshold) {
     switch (type) {
         case "int":
+            if (value1 == value2) return 4;
+            const diff1 = value1 - value2;
+            const thres1 = threshold ?? 3;
+            if (Math.abs(diff1) <= thres1) {
+                if (diff1 < 0) return 1; // cerca y menor
+                if (diff1 > 0) return 3; // cerca y mayor
+            }
+            return 0;
         case "float":
-            if (value1 == value2) return 2;
-            if (
-                Math.abs(value1 - value2) <=
-                (threshold ?? (type === "int" ? 3 : 0.5))
-            )
-                return 1;
+            if (value1 == value2) return 4;
+            const diff2 = value1 - value2;
+            const thres2 = threshold ?? 0.5;
+            if (Math.abs(diff2) <= thres2) {
+                if (diff2 < 0) return 1; // cerca y menor
+                if (diff2 > 0) return 3; // cerca y mayor
+            }
             return 0;
         case "options":
-            if (JSON.stringify(value1) === JSON.stringify(value2)) return 2;
-            if (value1.some((el) => value2.includes(el))) return 1;
+            if (JSON.stringify(value1) === JSON.stringify(value2)) return 4;
+            if (value1.some((el) => value2.includes(el))) return 2; // cerca y no es número
             return 0;
         case "string":
-            return value1 == value2 ? 2 : 0;
+            return value1 == value2 ? 4 : 0;
         default:
             return 0;
     }
@@ -40,7 +40,6 @@ function setItemInGameList(item, random) {
         `[game="${window.LOCAL.actual_page}"]`
     );
 
-    // Obtener la configuración para saber el tipo de cada campo
     const config = window.LOCAL.pages_info.find(
         (p) => p.page === window.LOCAL.actual_page
     ).config;
@@ -56,9 +55,9 @@ function setItemInGameList(item, random) {
             const type = config[key];
             const compare = compareValues(value, random[key], type);
             const border =
-                compare === 2
+                compare === 4
                     ? "border-[#6dd103]"
-                    : compare === 1
+                    : compare <= 3 && compare >= 1
                     ? "border-[#e0b903]"
                     : "border-gray-300";
             return `<p class="px-2 py-1 border ${border} rounded-full"><span class="capitalize font-semibold">${key.replaceAll(
@@ -88,11 +87,19 @@ function setKPIs(item, random) {
                 : light_success.dataset.best_value
             : null;
 
-        const updateLightSuccess = (newValue) => {
+        const updateLightSuccess = (newValue, compare) => {
             light_success.dataset.best_value =
                 type === "options" ? JSON.stringify(newValue) : newValue;
-            light_success.querySelector("[success-value]").textContent =
-                Array.isArray(newValue) ? newValue.join(", ") : newValue;
+            if (compare === 1) {
+                light_success.querySelector("[success-value]").textContent =
+                    newValue + " ⇧";
+            } else if (compare === 3) {
+                light_success.querySelector("[success-value]").textContent =
+                    newValue + " ⇩";
+            } else {
+                light_success.querySelector("[success-value]").textContent =
+                    Array.isArray(newValue) ? newValue.join(", ") : newValue;
+            }
         };
 
         const compare = compareValues(
@@ -102,10 +109,10 @@ function setKPIs(item, random) {
             type === "int" ? 3 : type === "float" ? 0.5 : undefined
         );
 
-        if (compare === 2) {
-            updateLightSuccess(item[key]);
+        if (compare === 4) {
+            updateLightSuccess(item[key], compare);
             light_success.classList.add("success");
-        } else if (compare === 1) {
+        } else if (compare <= 3 && compare >= 1) {
             if (!light_success.classList.contains("success")) {
                 if (type === "options") {
                     const currentMatches = item[key].filter((element) =>
@@ -117,14 +124,14 @@ function setKPIs(item, random) {
                           ).length
                         : -1;
                     if (currentMatches > bestMatches) {
-                        updateLightSuccess(item[key]);
+                        updateLightSuccess(item[key], compare);
                     }
                 } else if (
                     !best_value ||
                     Math.abs(item[key] - random[key]) <
                         Math.abs(best_value - random[key])
                 ) {
-                    updateLightSuccess(item[key]);
+                    updateLightSuccess(item[key], compare);
                 }
             }
             light_success.classList.add("close");
